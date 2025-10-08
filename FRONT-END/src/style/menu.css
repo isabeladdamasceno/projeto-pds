@@ -12,7 +12,7 @@
 }
 
 .menu__logo img {
-  max-width: 980px; /* aumenta bastante a logo */
+  max-width: 980px; 
   margin-bottom: 2rem;
 }
 
@@ -27,8 +27,8 @@
   background-color: white;
   border: 3px solid #e60000;
   border-radius: 25px;
-  width: 380px;   /* caixa maior */
-  height: 450px;  /* caixa maior */
+  width: 380px;   
+  height: 450px;  
   display: flex;
   flex-direction: column;
   align-items: center;
