@@ -30,7 +30,7 @@ npm install lucide-react
 
 ## Iniciando o Sistema
 
-### Opção 1: Iniciar Frontend e Backend separadamente
+### Opção 1: Iniciar Frontend 
 
 #### Frontend (React)
 
