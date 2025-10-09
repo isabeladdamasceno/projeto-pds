@@ -56,7 +56,7 @@ export default function Setores() {
     const duplicado = setores.some(
       (s) =>
         s.nome.toLowerCase() === nome.toLowerCase() &&
-        (!editando || s.id !== setorEditando?.id)
+        (!editando || s.id_setor !== setorEditando?.id_setor)
     );
 
     if (duplicado) {
@@ -69,12 +69,12 @@ export default function Setores() {
 
     try {
       if (editando && setorEditando) {
-        await axios.put(`http://localhost:3000/setores/${setorEditando.id}`, {
+        await axios.put(`http://localhost:3000/setores/${setorEditando.id_setor}`, {
           nome,
         });
 
         const atualizados = setores.map((s) =>
-          s.id === setorEditando.id ? { ...s, nome } : s
+          s.id_setor === setorEditando.id_setor ? { ...s, nome } : s
         );
         setSetores(atualizados);
         setMensagemModal("Alterações salvas com sucesso!");
@@ -101,7 +101,6 @@ export default function Setores() {
     }
   };
 
-
   const handleEditar = (setor) => {
     setEditando(true);
     setMostrarFormulario(true);
@@ -118,13 +117,15 @@ export default function Setores() {
   const confirmarExclusao = async () => {
     if (setorParaExcluir) {
       try {
-        await axios.delete(`http://localhost:3000/setores/${setorParaExcluir.id}`);
+        await axios.delete(`http://localhost:3000/setores/${setorParaExcluir.id_setor}`);
 
-        const atualizados = setores.filter((s) => s.id !== setorParaExcluir.id);
+        const atualizados = setores.filter(
+          (s) => s.id_setor !== setorParaExcluir.id_setor
+        );
         setSetores(atualizados);
 
         setMensagemModal(
-          `O setor ${setorParaExcluir.nome} (ID: ${setorParaExcluir.id}) foi excluído com sucesso.`
+          `O setor ${setorParaExcluir.nome} (ID: ${setorParaExcluir.id_setor}) foi excluído com sucesso.`
         );
         setMostrarModalSucesso(true);
       } catch (error) {
@@ -179,7 +180,9 @@ export default function Setores() {
           </div>
 
           {erroValidacao && (
-            <div className="erro__mensagem__setor">{erroValidacao}</div>
+            <div className="erro__mensagem__setor" style={{ color: "black" }}>
+              {erroValidacao}
+            </div>
           )}
 
           <div className="formulario__acoes">
@@ -216,8 +219,8 @@ export default function Setores() {
               <tbody>
                 {setoresFiltrados.length > 0 ? (
                   setoresFiltrados.map((setor) => (
-                    <tr key={setor.id}>
-                      <td>{setor.id}</td>
+                    <tr key={setor.id_setor}>
+                      <td>{setor.id_setor}</td>
                       <td>{setor.nome}</td>
                       <td style={{ textAlign: "right", paddingRight: "60px" }}>
                         <button className="editar" onClick={() => handleEditar(setor)}>
@@ -258,7 +261,7 @@ export default function Setores() {
             </button>
             <p>
               Você está prestes a excluir permanentemente o setor{" "}
-              <strong>{setorParaExcluir?.nome}</strong> (ID: {setorParaExcluir?.id}).
+              <strong>{setorParaExcluir?.nome}</strong> (ID: {setorParaExcluir?.id_setor}).
               <br />
               Esta ação é irreversível.
             </p>

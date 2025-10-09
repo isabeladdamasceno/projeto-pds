@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Settings, Search, X } from "lucide-react";
+import { Settings, Search, X, Check } from "lucide-react";
 import axios from "axios";
 import logo from "../img/logo.png";
 import "../style/modelos.css";
@@ -44,7 +44,7 @@ export default function Modelos() {
     m.nome.toLowerCase().includes(busca.toLowerCase())
   );
 
-  // Cadastro  e editar
+  // Cadastrar e editar
   const handleGravar = async () => {
     const nome = nomeModelo.trim();
     const marca = marcaModelo.trim();
@@ -54,7 +54,6 @@ export default function Modelos() {
       return;
     }
 
-    // Verificação de duplicação 
     const duplicado = modelos.some(
       (m) =>
         m.nome.toLowerCase() === nome.toLowerCase() &&
@@ -197,7 +196,12 @@ export default function Modelos() {
           </div>
 
           {erroValidacao && (
-            <div className="erro__mensagem__modelo">{erroValidacao}</div>
+            <div
+              className="erro__mensagem__modelo"
+              style={{ color: "black" }}
+            >
+              {erroValidacao}
+            </div>
           )}
 
           <div className="formulario__acoes__modelo">
@@ -279,7 +283,7 @@ export default function Modelos() {
         </>
       )}
 
-      {/* MODAL CONFIRMAÇÃO */}
+      {/* MODAIS */}
       {mostrarModalConfirmacao && (
         <div className="modal__fundo__modelo">
           <div className="modal__confirmacao__modelo">
@@ -314,7 +318,6 @@ export default function Modelos() {
         </div>
       )}
 
-      {/* MODAL SUCESSO */}
       {mostrarModalSucesso && (
         <div className="modal__fundo__modelo">
           <div className="modal__sucesso__modelo">
@@ -325,6 +328,7 @@ export default function Modelos() {
               <X size={26} />
             </button>
             <p>{mensagemModal}</p>
+            <Check size={38} color="#00bf63" />
           </div>
         </div>
       )}
