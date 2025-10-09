@@ -6,8 +6,6 @@ Este projeto consiste em um sistema para gerenciamento da manutenção da frota 
 
 Node.js (v18 ou superior)
 
-MySQL (ou MariaDB)
-
 Git (opcional)
 
 ## 🚀 Instalação e Configuração
