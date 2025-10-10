@@ -27,12 +27,15 @@ export default function Modelos() {
   // Carrega modelos do backend
   useEffect(() => {
     const carregarModelos = async () => {
+      setCarregando(true);
       try {
         const response = await axios.get("http://localhost:3000/modelos");
         setModelos(response.data);
       } catch (error) {
         console.error("Erro ao carregar modelos:", error);
-        setErroValidacao("Não foi possível carregar os modelos.");
+        setErroValidacao("Não foi possível carregar os modelos. Verifique o servidor.");
+      } finally {
+        setCarregando(false);
       }
     };
 
@@ -275,8 +278,16 @@ export default function Modelos() {
           <div className="cadastrar__container__modelo">
             <button
               className="cadastrar__modelo"
-              onClick={() => setMostrarFormulario(true)}
-            >
+              
+              onClick={() => {
+              setMostrarFormulario(true);
+              setEditando(false);          
+              setModeloEditando(null);     
+              setNomeModelo("");           
+              setMarcaModelo("");
+              setErroValidacao("");       
+           }}
+              >
               Cadastrar Modelo
             </button>
           </div>

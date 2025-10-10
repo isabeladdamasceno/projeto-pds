@@ -242,7 +242,15 @@ export default function Setores() {
           </div>
 
           <div className="cadastrar__container">
-            <button className="cadastrar" onClick={() => setMostrarFormulario(true)}>
+            <button className="cadastrar" 
+              onClick={() => {
+              setMostrarFormulario(true);   
+              setEditando(false);           
+              setSetorEditando(null);       
+              setNomeSetor("");         
+              setErroValidacao("");         
+            }}
+              >
               Cadastrar Setor
             </button>
           </div>
