@@ -31,7 +31,7 @@ export default function Veiculos() {
   const [mensagemModal, setMensagemModal] = useState("");
   const [veiculoParaExcluir, setVeiculoParaExcluir] = useState(null);
 
-  const API_URL = "http://localhost:3000/veiculos"; 
+  const API_URL = "http://localhost:3001/veiculos"; 
 
   useEffect(() => {
     const carregarVeiculos = async () => {

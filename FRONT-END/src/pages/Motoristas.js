@@ -28,24 +28,24 @@ export default function Motoristas() {
   const [mensagemModal, setMensagemModal] = useState("");
   const [motoristaParaExcluir, setMotoristaParaExcluir] = useState(null);
 
+  const API_URL = "http://localhost:3001/motoristas";
+
   const mascaraCPF = (valor) => {
     return valor
-      .replace(/\D/g, "") 
+      .replace(/\D/g, "")
       .replace(/(\d{3})(\d)/, "$1.$2")
       .replace(/(\d{3})(\d)/, "$1.$2")
       .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
   };
 
-  const mascaraCNH = (valor) => {
-    return valor.replace(/\D/g, "").substring(0, 11); 
-  };
+  const mascaraCNH = (valor) => valor.replace(/\D/g, "").substring(0, 11);
 
-  // Carrega motoristas do backend
+  // Carrega motoristas
   useEffect(() => {
     const carregarMotoristas = async () => {
       setCarregando(true);
       try {
-        const response = await axios.get("http://localhost:3000/motoristas");
+        const response = await axios.get(API_URL);
         setMotoristas(response.data);
       } catch (error) {
         console.error("Erro ao carregar motoristas:", error);
@@ -61,7 +61,7 @@ export default function Motoristas() {
     m.nome.toLowerCase().includes(busca.toLowerCase())
   );
 
-  // Cadastrar / Editar
+  //Cadastrar ou Editar
   const handleGravar = async () => {
     if (!nome || !cpf || !cnh || !situacao || !dataAdmissao) {
       setErroValidacao("Por favor, preencha todos os campos obrigatórios.");
@@ -71,37 +71,27 @@ export default function Motoristas() {
     setErroValidacao("");
     setCarregando(true);
 
+    const novoMotorista = {
+      nome,
+      cpf,
+      cnh,
+      situacao,
+      data_admissao: dataAdmissao,
+      data_demissao: dataDemissao,
+    };
+
     try {
       if (editando && motoristaEditando) {
-        await axios.put(
-          `http://localhost:3000/motoristas/${motoristaEditando.id_motorista}`,
-          {
-            nome,
-            cpf,
-            cnh,
-            situacao,
-            data_admissao: dataAdmissao,
-            data_demissao: dataDemissao,
-          }
-        );
+        await axios.put(`${API_URL}/${motoristaEditando.id_motorista}`, novoMotorista);
 
         const atualizados = motoristas.map((m) =>
-          m.id_motorista === motoristaEditando.id_motorista
-            ? { ...m, nome, cpf, cnh, situacao, data_admissao: dataAdmissao, data_demissao: dataDemissao }
-            : m
+          m.id_motorista === motoristaEditando.id_motorista ? { ...m, ...novoMotorista } : m
         );
+
         setMotoristas(atualizados);
         setMensagemModal("Alterações salvas com sucesso!");
       } else {
-        const response = await axios.post("http://localhost:3000/motoristas", {
-          nome,
-          cpf,
-          cnh,
-          situacao,
-          data_admissao: dataAdmissao,
-          data_demissao: dataDemissao,
-        });
-
+        const response = await axios.post(API_URL, novoMotorista);
         setMotoristas([...motoristas, response.data]);
         setMensagemModal("Cadastro efetuado com sucesso!");
       }
@@ -149,15 +139,9 @@ export default function Motoristas() {
   const confirmarExclusao = async () => {
     if (motoristaParaExcluir) {
       try {
-        await axios.delete(
-          `http://localhost:3000/motoristas/${motoristaParaExcluir.id_motorista}`
-        );
-        setMotoristas(
-          motoristas.filter((m) => m.id_motorista !== motoristaParaExcluir.id_motorista)
-        );
-        setMensagemModal(
-          `O motorista ${motoristaParaExcluir.nome} (ID: ${motoristaParaExcluir.id_motorista}) foi excluído com sucesso.`
-        );
+        await axios.delete(`${API_URL}/${motoristaParaExcluir.id_motorista}`);
+        setMotoristas(motoristas.filter((m) => m.id_motorista !== motoristaParaExcluir.id_motorista));
+        setMensagemModal(`O motorista ${motoristaParaExcluir.nome} foi excluído com sucesso.`);
         setMostrarModalSucesso(true);
       } catch (error) {
         console.error("Erro ao excluir motorista:", error);
@@ -171,17 +155,14 @@ export default function Motoristas() {
 
   return (
     <div className="pagina__motorista">
-      {/* CABEÇALHO */}
+      {/* Cabeçalho */}
       <header className="motorista__header">
         <img src={logo} alt="Transvicon Logística" className="logo" />
         <button
           className="botao__voltar__motorista"
           onClick={() => {
-            if (mostrarFormulario) {
-              setMostrarFormulario(false);
-            } else {
-              navigate("/gerenciamento");
-            }
+            if (mostrarFormulario) setMostrarFormulario(false);
+            else navigate("/gerenciamento");
           }}
         >
           ⬅ Voltar
@@ -193,7 +174,7 @@ export default function Motoristas() {
         <User size={70} color="#000" />
       </div>
 
-      {/* FORMULÁRIO */}
+      {/* Formulário */}
       {mostrarFormulario ? (
         <div className="formulario__container__motorista">
           <div className="formulario__titulo__motorista">
@@ -203,34 +184,17 @@ export default function Motoristas() {
           <div className="formulario__campo__motorista">
             <div className="campo__input__motorista">
               <label>Nome*</label>
-              <input
-                type="text"
-                placeholder="Digite o nome do motorista"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-              />
+              <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Digite o nome" />
             </div>
 
             <div className="campo__input__motorista">
               <label>CPF*</label>
-              <input
-                type="text"
-                placeholder="Digite o CPF"
-                value={cpf}
-                onChange={(e) => setCpf(mascaraCPF(e.target.value))}
-              maxLength={14}
-              />
+              <input type="text" value={cpf} onChange={(e) => setCpf(mascaraCPF(e.target.value))} maxLength={14} placeholder="Digite o CPF" />
             </div>
 
             <div className="campo__input__motorista">
               <label>CNH*</label>
-              <input
-                type="text"
-                placeholder="Digite a CNH"
-                value={cnh}
-                onChange={(e) => setCnh(mascaraCNH(e.target.value))}
-              maxLength={11}
-              />
+              <input type="text" value={cnh} onChange={(e) => setCnh(mascaraCNH(e.target.value))} maxLength={11} placeholder="Digite a CNH" />
             </div>
 
             <div className="campo__input__motorista">
@@ -244,40 +208,26 @@ export default function Motoristas() {
 
             <div className="campo__input__motorista">
               <label>Data de Admissão*</label>
-              <input
-                type="date"
-                value={dataAdmissao}
-                onChange={(e) => setDataAdmissao(e.target.value)}
-              />
+              <input type="date" value={dataAdmissao} onChange={(e) => setDataAdmissao(e.target.value)} />
             </div>
 
             <div className="campo__input__motorista">
               <label>Data de Demissão</label>
-              <input
-                type="date"
-                value={dataDemissao}
-                onChange={(e) => setDataDemissao(e.target.value)}
-              />
+              <input type="date" value={dataDemissao} onChange={(e) => setDataDemissao(e.target.value)} />
             </div>
           </div>
 
-          {erroValidacao && (
-            <div className="erro__mensagem__motorista">{erroValidacao}</div>
-          )}
+          {erroValidacao && <div className="erro__mensagem__motorista">{erroValidacao}</div>}
 
           <div className="formulario__acoes__motorista">
-            <button
-              className="gravar__motorista"
-              onClick={handleGravar}
-              disabled={carregando}
-            >
+            <button className="gravar__motorista" onClick={handleGravar} disabled={carregando}>
               {carregando ? "Salvando..." : "Gravar"}
             </button>
           </div>
         </div>
       ) : (
         <>
-          {/* PESQUISA */}
+          {/* Pesquisa */}
           <div className="acoes__motorista">
             <div className="barra__pesquisa__motorista">
               <Search className="icone__pesquisa__motorista" size={28} color="black" />
@@ -290,7 +240,7 @@ export default function Motoristas() {
             </div>
           </div>
 
-          {/* LISTAGEM */}
+          {/* Tabela */}
           <div className="tabela__container__motorista">
             <table className="tabela__motorista">
               <thead>
@@ -317,31 +267,23 @@ export default function Motoristas() {
                       <td>{motorista.data_admissao || "-"}</td>
                       <td>{motorista.data_demissao || "-"}</td>
                       <td className="acao__botoes__motorista">
-                        <button
-                          className="editar__motorista"
-                          onClick={() => handleEditar(motorista)}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="excluir__motorista"
-                          onClick={() => handleExcluir(motorista)}
-                        >
-                          Excluir
-                        </button>
+                        <button className="editar__motorista" onClick={() => handleEditar(motorista)}>Editar</button>
+                        <button className="excluir__motorista" onClick={() => handleExcluir(motorista)}>Excluir</button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8">Nenhum motorista encontrado</td>
+                    <td colSpan="8" style={{ textAlign: "center", padding: "15px" }}>
+                      Nenhum motorista encontrado
+                    </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
-          {/* BOTÃO CADASTRAR */}
+          {/* Botão cadastrar */}
           <div className="cadastrar__container__motorista">
             <button
               className="cadastrar__motorista"
@@ -357,33 +299,22 @@ export default function Motoristas() {
         </>
       )}
 
-      {/* MODAIS */}
+      {/* Modais */}
       {mostrarModalConfirmacao && (
         <div className="modal__fundo__motorista">
           <div className="modal__confirmacao__motorista">
-            <button
-              className="modal__fechar__motorista"
-              onClick={() => setMostrarModalConfirmacao(false)}
-            >
+            <button className="modal__fechar__motorista" onClick={() => setMostrarModalConfirmacao(false)}>
               <X size={26} />
             </button>
             <p>
-              Você está prestes a excluir permanentemente o motorista{" "}
-              <strong>{motoristaParaExcluir?.nome}</strong> (ID:{" "}
-              {motoristaParaExcluir?.id_motorista}). <br />
-              Esta ação é irreversível.
+              Você está prestes a excluir permanentemente o motorista <strong>{motoristaParaExcluir?.nome}</strong>.
+              <br /> Esta ação é irreversível.
             </p>
             <div className="modal__botoes__motorista">
-              <button
-                className="modal__botao__excluir__motorista"
-                onClick={confirmarExclusao}
-              >
+              <button className="modal__botao__excluir__motorista" onClick={confirmarExclusao}>
                 Excluir Permanentemente
               </button>
-              <button
-                className="modal__botao__cancelar__motorista"
-                onClick={() => setMostrarModalConfirmacao(false)}
-              >
+              <button className="modal__botao__cancelar__motorista" onClick={() => setMostrarModalConfirmacao(false)}>
                 Cancelar
               </button>
             </div>
@@ -394,10 +325,7 @@ export default function Motoristas() {
       {mostrarModalSucesso && (
         <div className="modal__fundo__motorista">
           <div className="modal__sucesso__motorista">
-            <button
-              className="modal__fechar__motorista"
-              onClick={() => setMostrarModalSucesso(false)}
-            >
+            <button className="modal__fechar__motorista" onClick={() => setMostrarModalSucesso(false)}>
               <X size={26} />
             </button>
             <p>{mensagemModal}</p>
