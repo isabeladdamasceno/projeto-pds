@@ -8,6 +8,8 @@ import "../style/modelos.css";
 export default function Modelos() {
   const navigate = useNavigate();
 
+  const API_URL = "http://localhost:3001/modelos"; 
+
   const [modelos, setModelos] = useState([]);
   const [busca, setBusca] = useState("");
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -18,36 +20,32 @@ export default function Modelos() {
 
   const [erroValidacao, setErroValidacao] = useState("");
   const [carregando, setCarregando] = useState(false);
-
   const [mostrarModalConfirmacao, setMostrarModalConfirmacao] = useState(false);
   const [mostrarModalSucesso, setMostrarModalSucesso] = useState(false);
   const [mensagemModal, setMensagemModal] = useState("");
   const [modeloParaExcluir, setModeloParaExcluir] = useState(null);
 
-  // Carrega modelos do backend
   useEffect(() => {
     const carregarModelos = async () => {
       setCarregando(true);
       try {
-        const response = await axios.get("http://localhost:3000/modelos");
+        const response = await axios.get(API_URL);
         setModelos(response.data);
       } catch (error) {
         console.error("Erro ao carregar modelos:", error);
-        setErroValidacao("Não foi possível carregar os modelos. Verifique o servidor.");
+        setErroValidacao("Erro ao carregar modelos. Verifique o servidor.");
       } finally {
         setCarregando(false);
       }
     };
-
     carregarModelos();
   }, []);
 
-  // busca
   const modelosFiltrados = modelos.filter((m) =>
     m.nome.toLowerCase().includes(busca.toLowerCase())
   );
 
-  // Cadastrar e editar
+  // Cadastrar ou Editar
   const handleGravar = async () => {
     const nome = nomeModelo.trim();
     const marca = marcaModelo.trim();
@@ -61,7 +59,7 @@ export default function Modelos() {
       (m) =>
         m.nome.toLowerCase() === nome.toLowerCase() &&
         m.marca.toLowerCase() === marca.toLowerCase() &&
-        (!editando || m.id !== modeloEditando?.id)
+        (!editando || m.id_modelo !== modeloEditando?.id_modelo)
     );
 
     if (duplicado) {
@@ -74,39 +72,39 @@ export default function Modelos() {
 
     try {
       if (editando && modeloEditando) {
-        await axios.put(`http://localhost:3000/modelos/${modeloEditando.id}`, {
+        await axios.put(`${API_URL}/${modeloEditando.id_modelo}`, {
           nome,
           marca,
         });
 
         const atualizados = modelos.map((m) =>
-          m.id === modeloEditando.id ? { ...m, nome, marca } : m
+          m.id_modelo === modeloEditando.id_modelo ? { ...m, nome, marca } : m
         );
         setModelos(atualizados);
         setMensagemModal("Alterações salvas com sucesso!");
       } else {
-        const response = await axios.post("http://localhost:3000/modelos", {
-          nome,
-          marca,
-        });
-
+        const response = await axios.post(API_URL, { nome, marca });
         setModelos([...modelos, response.data]);
         setMensagemModal("Cadastro efetuado com sucesso!");
       }
 
       setMostrarModalSucesso(true);
+      limparFormulario();
       setMostrarFormulario(false);
-      setEditando(false);
-      setNomeModelo("");
-      setMarcaModelo("");
     } catch (error) {
       console.error("Erro ao salvar modelo:", error);
-      setErroValidacao(
-        error.response?.data?.error || "Erro ao salvar modelo. Verifique o servidor."
-      );
+      setErroValidacao("Erro ao salvar modelo. Verifique o servidor.");
     } finally {
       setCarregando(false);
     }
+  };
+
+  const limparFormulario = () => {
+    setNomeModelo("");
+    setMarcaModelo("");
+    setModeloEditando(null);
+    setEditando(false);
+    setErroValidacao("");
   };
 
   const handleEditar = (modelo) => {
@@ -115,7 +113,6 @@ export default function Modelos() {
     setModeloEditando(modelo);
     setNomeModelo(modelo.nome);
     setMarcaModelo(modelo.marca);
-    setErroValidacao("");
   };
 
   const handleExcluir = (modelo) => {
@@ -126,14 +123,9 @@ export default function Modelos() {
   const confirmarExclusao = async () => {
     if (modeloParaExcluir) {
       try {
-        await axios.delete(`http://localhost:3000/modelos/${modeloParaExcluir.id}`);
-
-        const atualizados = modelos.filter((m) => m.id !== modeloParaExcluir.id);
-        setModelos(atualizados);
-
-        setMensagemModal(
-          `O modelo ${modeloParaExcluir.nome} (ID: ${modeloParaExcluir.id}) foi excluído com sucesso.`
-        );
+        await axios.delete(`${API_URL}/${modeloParaExcluir.id_modelo}`);
+        setModelos(modelos.filter((m) => m.id_modelo !== modeloParaExcluir.id_modelo));
+        setMensagemModal(`O modelo ${modeloParaExcluir.nome} foi excluído com sucesso.`);
         setMostrarModalSucesso(true);
       } catch (error) {
         console.error("Erro ao excluir modelo:", error);
@@ -147,17 +139,14 @@ export default function Modelos() {
 
   return (
     <div className="pagina__modelos">
-      {/* CABEÇALHO */}
+      {/* Cabeçalho */}
       <header className="modelos__header">
         <img src={logo} alt="Transvicon Logística" className="logo" />
         <button
           className="botao__voltar__modelo"
           onClick={() => {
-            if (mostrarFormulario) {
-              setMostrarFormulario(false);
-            } else {
-              navigate("/gerenciamento");
-            }
+            if (mostrarFormulario) setMostrarFormulario(false);
+            else navigate("/gerenciamento");
           }}
         >
           ⬅ Voltar
@@ -169,7 +158,7 @@ export default function Modelos() {
         <Settings size={70} color="#000" />
       </div>
 
-      {/* FORMULÁRIO */}
+      {/* Formulário */}
       {mostrarFormulario ? (
         <div className="formulario__container__modelo">
           <div className="formulario__titulo__modelo">
@@ -199,12 +188,7 @@ export default function Modelos() {
           </div>
 
           {erroValidacao && (
-            <div
-              className="erro__mensagem__modelo"
-              style={{ color: "black" }}
-            >
-              {erroValidacao}
-            </div>
+            <div className="erro__mensagem__modelo">{erroValidacao}</div>
           )}
 
           <div className="formulario__acoes__modelo">
@@ -219,7 +203,7 @@ export default function Modelos() {
         </div>
       ) : (
         <>
-          {/* PESQUISA */}
+          {/* Pesquisa */}
           <div className="acoes__modelo">
             <div className="barra__pesquisa__modelo">
               <Search className="icone__pesquisa__modelo" size={28} color="black" />
@@ -232,7 +216,7 @@ export default function Modelos() {
             </div>
           </div>
 
-          {/* LISTAGEM */}
+          {/* Tabela */}
           <div className="tabela__container__modelo">
             <table className="tabela__modelo">
               <thead>
@@ -246,21 +230,15 @@ export default function Modelos() {
               <tbody>
                 {modelosFiltrados.length > 0 ? (
                   modelosFiltrados.map((modelo) => (
-                    <tr key={modelo.id}>
-                      <td>{modelo.id}</td>
+                    <tr key={modelo.id_modelo}>
+                      <td>{modelo.id_modelo}</td>
                       <td>{modelo.nome}</td>
                       <td>{modelo.marca}</td>
                       <td className="acao__botoes__modelo">
-                        <button
-                          className="editar__modelo"
-                          onClick={() => handleEditar(modelo)}
-                        >
+                        <button className="editar__modelo" onClick={() => handleEditar(modelo)}>
                           Editar
                         </button>
-                        <button
-                          className="excluir__modelo"
-                          onClick={() => handleExcluir(modelo)}
-                        >
+                        <button className="excluir__modelo" onClick={() => handleExcluir(modelo)}>
                           Excluir
                         </button>
                       </td>
@@ -268,60 +246,48 @@ export default function Modelos() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4">Nenhum modelo encontrado</td>
+                    <td colSpan="4" style={{ textAlign: "center", padding: "15px" }}>
+                      Nenhum modelo encontrado
+                    </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
+          {/* Botão cadastrar */}
           <div className="cadastrar__container__modelo">
             <button
               className="cadastrar__modelo"
-              
               onClick={() => {
-              setMostrarFormulario(true);
-              setEditando(false);          
-              setModeloEditando(null);     
-              setNomeModelo("");           
-              setMarcaModelo("");
-              setErroValidacao("");       
-           }}
-              >
+                setMostrarFormulario(true);
+                setEditando(false);
+                limparFormulario();
+              }}
+            >
               Cadastrar Modelo
             </button>
           </div>
         </>
       )}
 
-      {/* MODAIS */}
+      {/* Modais */}
       {mostrarModalConfirmacao && (
         <div className="modal__fundo__modelo">
           <div className="modal__confirmacao__modelo">
-            <button
-              className="modal__fechar__modelo"
-              onClick={() => setMostrarModalConfirmacao(false)}
-            >
+            <button className="modal__fechar__modelo" onClick={() => setMostrarModalConfirmacao(false)}>
               <X size={26} />
             </button>
             <p>
               Você está prestes a excluir permanentemente o modelo{" "}
-              <strong>{modeloParaExcluir?.nome}</strong> (ID:{" "}
-              {modeloParaExcluir?.id}). <br />
-              Esta ação é irreversível.
+              <strong>{modeloParaExcluir?.nome}</strong>.
+              <br /> Esta ação é irreversível.
             </p>
-
             <div className="modal__botoes__modelo">
-              <button
-                className="modal__botao__excluir__modelo"
-                onClick={confirmarExclusao}
-              >
+              <button className="modal__botao__excluir__modelo" onClick={confirmarExclusao}>
                 Excluir Permanentemente
               </button>
-              <button
-                className="modal__botao__cancelar__modelo"
-                onClick={() => setMostrarModalConfirmacao(false)}
-              >
+              <button className="modal__botao__cancelar__modelo" onClick={() => setMostrarModalConfirmacao(false)}>
                 Cancelar
               </button>
             </div>
@@ -332,10 +298,7 @@ export default function Modelos() {
       {mostrarModalSucesso && (
         <div className="modal__fundo__modelo">
           <div className="modal__sucesso__modelo">
-            <button
-              className="modal__fechar__modelo"
-              onClick={() => setMostrarModalSucesso(false)}
-            >
+            <button className="modal__fechar__modelo" onClick={() => setMostrarModalSucesso(false)}>
               <X size={26} />
             </button>
             <p>{mensagemModal}</p>

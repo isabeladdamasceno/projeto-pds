@@ -8,6 +8,8 @@ import "../style/veiculos.css";
 export default function Veiculos() {
   const navigate = useNavigate();
 
+  const API_URL = "http://localhost:3001/veiculos"; 
+
   const [veiculos, setVeiculos] = useState([]);
   const [busca, setBusca] = useState("");
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -30,8 +32,6 @@ export default function Veiculos() {
   const [mostrarModalSucesso, setMostrarModalSucesso] = useState(false);
   const [mensagemModal, setMensagemModal] = useState("");
   const [veiculoParaExcluir, setVeiculoParaExcluir] = useState(null);
-
-  const API_URL = "http://localhost:3001/veiculos"; 
 
   useEffect(() => {
     const carregarVeiculos = async () => {

@@ -8,6 +8,8 @@ import "../style/motoristas.css";
 export default function Motoristas() {
   const navigate = useNavigate();
 
+  const API_URL = "http://localhost:3001/motoristas";
+
   const [motoristas, setMotoristas] = useState([]);
   const [busca, setBusca] = useState("");
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -27,8 +29,6 @@ export default function Motoristas() {
   const [mostrarModalSucesso, setMostrarModalSucesso] = useState(false);
   const [mensagemModal, setMensagemModal] = useState("");
   const [motoristaParaExcluir, setMotoristaParaExcluir] = useState(null);
-
-  const API_URL = "http://localhost:3001/motoristas";
 
   const mascaraCPF = (valor) => {
     return valor
