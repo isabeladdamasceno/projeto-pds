@@ -30,7 +30,7 @@ export default function Gerenciamento() {
 
         {/* LADO DIREITO */}
         <div className="gerenciamento__direita">
-          <div className="gerenciamento__item">
+          <div className="gerenciamento__item" onClick={() => navigate("/veiculos")}>
             <Truck size={28} color="#000" />
             <span>VEÍCULOS</span>
           </div>

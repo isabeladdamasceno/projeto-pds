@@ -1,0 +1,371 @@
+@import url('https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&family=Krona+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.pagina__veiculo {
+  background-color: #f2f2f2;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CABEÇALHO */
+.veiculo__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f2f2;
+  padding: 15px 40px;
+}
+
+.veiculo__header .logo {
+  height: 70px;
+}
+
+.botao__voltar__veiculo {
+  background: white;
+  color: #000;
+  border: 3px solid red;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.titulo__central__veiculo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 27px;
+  font-weight: bold;
+  color: #000;
+  margin: 10px 0 20px 0;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.titulo__central__veiculo h1 {
+  color: #000;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+/* BARRA DE PESQUISA */
+.acoes__veiculo {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  width: 100%;
+}
+
+.barra__pesquisa__veiculo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 500px;
+}
+
+.barra__pesquisa__veiculo input {
+  width: 100%;
+  padding: 10px 15px 10px 45px;
+  background-color: white;
+  border: 1px solid #000;
+  border-radius: 20px;
+  font-size: 22px;
+  font-family: 'Chau Philomene One', sans-serif;
+  color: #000;
+}
+
+.icone__pesquisa__veiculo {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: black;
+  pointer-events: none;
+}
+
+/* TABELA */
+.tabela__container__veiculo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+  width: 100vw;
+}
+
+.tabela__veiculo {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+.tabela__veiculo thead th {
+  background-color: red;
+  color: white;
+  font-family: "Chau Philomene One", sans-serif;
+  font-size: 22px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+}
+
+.tabela__veiculo td {
+  text-align: center;
+  border: 1px solid #ddd;
+  font-size: 20px;
+  font-family: "Chau Philomene One", sans-serif;
+  padding: 8px 10px;
+  color: black;
+}
+
+.tabela__veiculo th:nth-child(1),
+.tabela__veiculo td:nth-child(1) { width: 5%; }   /* ID */
+.tabela__veiculo th:nth-child(2),
+.tabela__veiculo td:nth-child(2) { width: 8%; }   /* Placa */
+.tabela__veiculo th:nth-child(3),
+.tabela__veiculo td:nth-child(3) { width: 8%; }   /* Modelo */
+.tabela__veiculo th:nth-child(4),
+.tabela__veiculo td:nth-child(4) { width: 10%; }  /* Marca */
+.tabela__veiculo th:nth-child(5),
+.tabela__veiculo td:nth-child(5) { width: 12%; }  /* Tipo */
+.tabela__veiculo th:nth-child(6),
+.tabela__veiculo td:nth-child(6) { width: 6%; }   /* Ano */
+.tabela__veiculo th:nth-child(7),
+.tabela__veiculo td:nth-child(7) { width: 8%; }   /* KM */
+.tabela__veiculo th:nth-child(8),
+.tabela__veiculo td:nth-child(8) { width: 7%; }   /* Cor */
+.tabela__veiculo th:nth-child(9),
+.tabela__veiculo td:nth-child(9) { width: 13%; }  /* Chassi */
+.tabela__veiculo th:nth-child(10),
+.tabela__veiculo td:nth-child(10) { width: 13%; } /* Situação + botões */
+
+.acao__botoes__veiculo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+}
+
+
+.editar__veiculo,
+.excluir__veiculo {
+  font-size: 18px;
+  padding: 10px 18px;  
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+  border: none;
+  margin-right: 15px;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+
+.editar__veiculo {
+  background: gray;
+  color: white;
+}
+
+.excluir__veiculo {
+  background: red;
+  color: white;
+}
+
+/* BOTÃO CADASTRAR */
+.cadastrar__container__veiculo {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding: 20px;
+}
+
+.cadastrar__veiculo {
+  background: #00bf63;
+  color: white;
+  border: none;
+  border-radius: 35px;
+  padding: 8px 25px !important;
+  font-size: 22px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.formulario__container__veiculo {
+  background: #d9d9d9;
+  padding: 40px 50px;
+  margin: 20px auto;
+  border-radius: 15px;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.formulario__titulo__veiculo {
+  margin-bottom: 35px;
+  background: #666;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 22px;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.formulario__campo__veiculo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  
+}
+
+.campo__input__veiculo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.campo__input__veiculo label {
+  flex: 0 0 160px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #000;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.campo__input__veiculo input,
+.campo__input__veiculo select {
+  width: 70%; 
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 18px;
+  font-family: "Open Sans", sans-serif;
+  color: #000;
+}
+
+/* MENSAGEM DE ERRO */
+.erro__mensagem__veiculo {
+  color: black;
+  font-size: 18px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+
+/* BOTÃO GRAVAR */
+.formulario__acoes__veiculo {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.gravar__veiculo {
+  background-color: #00bf63;
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px;
+}
+
+
+/* MODAIS */
+.modal__fundo__veiculo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal__confirmacao__veiculo,
+.modal__sucesso__veiculo {
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-radius: 20px;
+  padding: 35px;
+  width: 550px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.modal__confirmacao__veiculo p,
+.modal__sucesso__veiculo p {
+  font-size: 20px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.modal__fechar__veiculo {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: red;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.modal__botoes__veiculo {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.modal__botao__excluir__veiculo {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.modal__botao__cancelar__veiculo {
+  background-color: #00bf63;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.modal__sucesso__veiculo svg {
+  display: block;
+  margin: 0 auto;
+  margin-top: -10px;
+}
+
+.tabela__veiculo td:last-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px; 
+}
