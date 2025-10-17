@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Truck, Search, X, Check } from "lucide-react";
 import axios from "axios";
@@ -31,46 +31,35 @@ export default function Veiculos() {
   const [mensagemModal, setMensagemModal] = useState("");
   const [veiculoParaExcluir, setVeiculoParaExcluir] = useState(null);
 
-  // 🔧 Dados fictícios temporários
+  const API_URL = "http://localhost:3000/veiculos"; 
+
   useEffect(() => {
-    setVeiculos([
-      {
-        placa: "ABC1D23",
-        id_modelo: "3",
-        marca: "Volvo",
-        tipo: "Caminhão Refrigerado",
-        ano_fabricacao: "2022",
-        quilometragem: "158000.50",
-        cor: "Branco",
-        chassi: "9BWZZZ377VT004251",
-        situacao: "Ativo",
-      },
-      {
-        placa: "XYZ9K88",
-        id_modelo: "5",
-        marca: "Scania",
-        tipo: "Graneleiro",
-        ano_fabricacao: "2020",
-        quilometragem: "289000.00",
-        cor: "Azul",
-        chassi: "8ABZZZ123TT004298",
-        situacao: "Inativo",
-      },
-    ]);
+    const carregarVeiculos = async () => {
+      try {
+        setCarregando(true);
+        const response = await axios.get(API_URL);
+        setVeiculos(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar veículos:", error);
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    carregarVeiculos();
   }, []);
 
   const veiculosFiltrados = veiculos.filter((v) =>
-  v.placa.toLowerCase().includes(busca.toLowerCase()) ||
-  v.marca.toLowerCase().includes(busca.toLowerCase()) ||
-  v.tipo.toLowerCase().includes(busca.toLowerCase()) ||
-  v.cor.toLowerCase().includes(busca.toLowerCase()) ||
-  v.chassi.toLowerCase().includes(busca.toLowerCase()) ||
-  v.ano_fabricacao.toString().includes(busca) ||
-  v.situacao.toLowerCase().includes(busca.toLowerCase())
-);
+    v.placa.toLowerCase().includes(busca.toLowerCase()) ||
+    v.marca.toLowerCase().includes(busca.toLowerCase()) ||
+    v.tipo.toLowerCase().includes(busca.toLowerCase()) ||
+    v.cor.toLowerCase().includes(busca.toLowerCase()) ||
+    v.chassi.toLowerCase().includes(busca.toLowerCase()) ||
+    v.ano_fabricacao.toString().includes(busca) ||
+    v.situacao.toLowerCase().includes(busca.toLowerCase())
+  );
 
-
-  const handleGravar = () => {
+  const handleGravar = async () => {
     if (!placa || !idModelo || !tipo || !anoFabricacao || !quilometragem || !chassi || !situacao) {
       setErroValidacao("Preencha todos os campos obrigatórios.");
       return;
@@ -88,20 +77,25 @@ export default function Veiculos() {
       situacao,
     };
 
-    if (editando && veiculoEditando) {
-      const atualizados = veiculos.map((v) =>
-        v.placa === veiculoEditando.placa ? novoVeiculo : v
-      );
-      setVeiculos(atualizados);
-      setMensagemModal("Veículo atualizado com sucesso!");
-    } else {
-      setVeiculos([...veiculos, novoVeiculo]);
-      setMensagemModal("Veículo cadastrado com sucesso!");
-    }
+    try {
+      if (editando && veiculoEditando) {
+        await axios.put(`${API_URL}/${veiculoEditando.placa}`, novoVeiculo);
+        setMensagemModal("Veículo atualizado com sucesso!");
+      } else {
+        await axios.post(API_URL, novoVeiculo);
+        setMensagemModal("Veículo cadastrado com sucesso!");
+      }
 
-    setMostrarModalSucesso(true);
-    limparFormulario();
-    setMostrarFormulario(false);
+      const response = await axios.get(API_URL);
+      setVeiculos(response.data);
+
+      setMostrarModalSucesso(true);
+      limparFormulario();
+      setMostrarFormulario(false);
+    } catch (error) {
+      console.error("Erro ao salvar veículo:", error);
+      setErroValidacao("Erro ao salvar veículo. Verifique os dados.");
+    }
   };
 
   const limparFormulario = () => {
@@ -139,12 +133,19 @@ export default function Veiculos() {
     setMostrarModalConfirmacao(true);
   };
 
-  const confirmarExclusao = () => {
-    if (veiculoParaExcluir) {
-      setVeiculos(veiculos.filter((v) => v.placa !== veiculoParaExcluir.placa));
-      setMensagemModal(`Veículo ${veiculoParaExcluir.placa} excluído com sucesso!`);
-      setMostrarModalSucesso(true);
-      setMostrarModalConfirmacao(false);
+  const confirmarExclusao = async () => {
+    try {
+      if (veiculoParaExcluir) {
+        await axios.delete(`${API_URL}/${veiculoParaExcluir.placa}`);
+        const response = await axios.get(API_URL);
+        setVeiculos(response.data);
+
+        setMensagemModal(`Veículo ${veiculoParaExcluir.placa} excluído com sucesso!`);
+        setMostrarModalSucesso(true);
+        setMostrarModalConfirmacao(false);
+      }
+    } catch (error) {
+      console.error("Erro ao excluir veículo:", error);
     }
   };
 
@@ -177,17 +178,33 @@ export default function Veiculos() {
           <div className="formulario__campo__veiculo">
             <div className="campo__input__veiculo">
               <label>Placa*</label>
-              <input type="text" placeholder="Ex: ABC1D23" value={placa} onChange={(e) => setPlaca(e.target.value.toUpperCase())} maxLength={8} />
+              <input
+                type="text"
+                placeholder="Ex: ABC1D23"
+                value={placa}
+                onChange={(e) => setPlaca(e.target.value.toUpperCase())}
+                maxLength={8}
+              />
             </div>
 
             <div className="campo__input__veiculo">
               <label>Modelo*</label>
-              <input type="number" placeholder="Digite o modelo" value={idModelo} onChange={(e) => setIdModelo(e.target.value)} />
+              <input
+                type="text"
+                placeholder="Digite o nome do modelo"
+                value={idModelo}
+                onChange={(e) => setIdModelo(e.target.value)}
+              />
             </div>
 
             <div className="campo__input__veiculo">
               <label>Marca*</label>
-              <input type="text" placeholder="Digite a marca" value={marca} onChange={(e) => setMarca(e.target.value)} />
+              <input
+                type="text"
+                placeholder="Digite a marca"
+                value={marca}
+                onChange={(e) => setMarca(e.target.value)}
+              />
             </div>
 
             <div className="campo__input__veiculo">
@@ -205,22 +222,43 @@ export default function Veiculos() {
 
             <div className="campo__input__veiculo">
               <label>Ano Fabricação*</label>
-              <input type="number" placeholder="Digite o ano" value={anoFabricacao} onChange={(e) => setAnoFabricacao(e.target.value)} />
+              <input
+                type="number"
+                placeholder="Digite o ano"
+                value={anoFabricacao}
+                onChange={(e) => setAnoFabricacao(e.target.value)}
+              />
             </div>
 
             <div className="campo__input__veiculo">
               <label>Quilometragem*</label>
-              <input type="number" placeholder="Ex: 120000" value={quilometragem} onChange={(e) => setQuilometragem(e.target.value)} />
+              <input
+                type="number"
+                placeholder="Ex: 120000"
+                value={quilometragem}
+                onChange={(e) => setQuilometragem(e.target.value)}
+              />
             </div>
 
             <div className="campo__input__veiculo">
               <label>Cor*</label>
-              <input type="text" placeholder="Digite a cor" value={cor} onChange={(e) => setCor(e.target.value)} />
+              <input
+                type="text"
+                placeholder="Digite a cor"
+                value={cor}
+                onChange={(e) => setCor(e.target.value)}
+              />
             </div>
 
             <div className="campo__input__veiculo">
               <label>Chassi*</label>
-              <input type="text" placeholder="Ex: 9BWZZZ377VT004251" value={chassi} onChange={(e) => setChassi(e.target.value.toUpperCase())} maxLength={17} />
+              <input
+                type="text"
+                placeholder="Ex: 9BWZZZ377VT004251"
+                value={chassi}
+                onChange={(e) => setChassi(e.target.value.toUpperCase())}
+                maxLength={17}
+              />
             </div>
 
             <div className="campo__input__veiculo">
@@ -246,55 +284,68 @@ export default function Veiculos() {
           <div className="acoes__veiculo">
             <div className="barra__pesquisa__veiculo">
               <Search className="icone__pesquisa__veiculo" size={28} color="black" />
-              <input type="text" placeholder="Pesquisar veículo" value={busca} onChange={(e) => setBusca(e.target.value)} />
+              <input
+                type="text"
+                placeholder="Pesquisar veículo"
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+              />
             </div>
           </div>
 
           <div className="tabela__container__veiculo">
-  <table className="tabela__veiculo">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Placa</th>
-        <th>Modelo</th>
-        <th>Marca</th>
-        <th>Tipo</th>
-        <th>Ano</th>
-        <th>KM</th>
-        <th>Cor</th>
-        <th>Chassi</th>
-        <th>Situação</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {veiculosFiltrados.length > 0 ? (
-        veiculosFiltrados.map((v, index) => (
-          <tr key={v.placa}>
-            <td>{index + 1}</td> 
-            <td>{v.placa}</td>
-            <td>{v.id_modelo}</td> 
-            <td>{v.marca}</td>
-            <td>{v.tipo}</td>
-            <td>{v.ano_fabricacao}</td>
-            <td>{v.quilometragem}</td>
-            <td>{v.cor}</td>
-            <td>{v.chassi}</td>
-            <td>{v.situacao}</td>
-            <td className="acao__botoes__veiculo">
-              <button className="editar__veiculo" onClick={() => handleEditar(v)}>Editar</button>
-              <button className="excluir__veiculo" onClick={() => handleExcluir(v)}>Excluir</button>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan="11">Nenhum veículo encontrado</td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
+            <table className="tabela__veiculo">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Placa</th>
+                  <th>Modelo</th>
+                  <th>Marca</th>
+                  <th>Tipo</th>
+                  <th>Ano</th>
+                  <th>KM</th>
+                  <th>Cor</th>
+                  <th>Chassi</th>
+                  <th>Situação</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {carregando ? (
+                  <tr>
+                    <td colSpan="11">Carregando...</td>
+                  </tr>
+                ) : veiculosFiltrados.length > 0 ? (
+                  veiculosFiltrados.map((v, index) => (
+                    <tr key={v.placa}>
+                      <td>{index + 1}</td>
+                      <td>{v.placa}</td>
+                      <td>{v.modelo?.nome || v.id_modelo}</td>
+                      <td>{v.marca}</td>
+                      <td>{v.tipo}</td>
+                      <td>{v.ano_fabricacao}</td>
+                      <td>{v.quilometragem}</td>
+                      <td>{v.cor}</td>
+                      <td>{v.chassi}</td>
+                      <td>{v.situacao}</td>
+                      <td className="acao__botoes__veiculo">
+                        <button className="editar__veiculo" onClick={() => handleEditar(v)}>
+                          Editar
+                        </button>
+                        <button className="excluir__veiculo" onClick={() => handleExcluir(v)}>
+                          Excluir
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="11">Nenhum veículo encontrado</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
 
           <div className="cadastrar__container__veiculo">
             <button
@@ -314,16 +365,27 @@ export default function Veiculos() {
       {mostrarModalConfirmacao && (
         <div className="modal__fundo__veiculo">
           <div className="modal__confirmacao__veiculo">
-            <button className="modal__fechar__veiculo" onClick={() => setMostrarModalConfirmacao(false)}>
+            <button
+              className="modal__fechar__veiculo"
+              onClick={() => setMostrarModalConfirmacao(false)}
+            >
               <X size={26} />
             </button>
             <p>
-              Você está prestes a excluir permanentemente o veículo <strong>{veiculoParaExcluir?.placa}</strong>.
+              Você está prestes a excluir permanentemente o veículo{" "}
+              <strong>{veiculoParaExcluir?.placa}</strong>.
               <br /> Esta ação é irreversível.
             </p>
             <div className="modal__botoes__veiculo">
-              <button className="modal__botao__excluir__veiculo" onClick={confirmarExclusao}>Excluir</button>
-              <button className="modal__botao__cancelar__veiculo" onClick={() => setMostrarModalConfirmacao(false)}>Cancelar</button>
+              <button className="modal__botao__excluir__veiculo" onClick={confirmarExclusao}>
+                Excluir
+              </button>
+              <button
+                className="modal__botao__cancelar__veiculo"
+                onClick={() => setMostrarModalConfirmacao(false)}
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
@@ -332,7 +394,10 @@ export default function Veiculos() {
       {mostrarModalSucesso && (
         <div className="modal__fundo__veiculo">
           <div className="modal__sucesso__veiculo">
-            <button className="modal__fechar__veiculo" onClick={() => setMostrarModalSucesso(false)}>
+            <button
+              className="modal__fechar__veiculo"
+              onClick={() => setMostrarModalSucesso(false)}
+            >
               <X size={26} />
             </button>
             <p>{mensagemModal}</p>
