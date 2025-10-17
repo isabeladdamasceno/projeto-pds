@@ -4,7 +4,8 @@ import Login from "./pages/Login";
 import Menu from "./pages/Menu";
 import Gerenciamento from "./pages/Gerenciamento";
 import Setores from "./pages/Setores";
-import Modelos from "./pages/Modelos";       
+import Modelos from "./pages/Modelos";
+import Motoristas from "./pages/Motoristas";        
 import "./style/global.css";          
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/gerenciamento" element={<Gerenciamento />} />
         <Route path="/setores" element={<Setores />} />
         <Route path="/modelos" element={<Modelos />} />
+        <Route path="/motoristas" element={<Motoristas />} />
       </Routes>
     </Router>
   );
