@@ -244,8 +244,8 @@ export default function Funcionarios() {
                   <th>CPF</th>
                   <th>Setor</th>
                   <th>Situação</th>
-                  <th>Admissão</th>
-                  <th>Demissão</th>
+                  <th>Data Admissão</th>
+                  <th>Data Demissão</th>
                   <th></th>
                 </tr>
               </thead>
