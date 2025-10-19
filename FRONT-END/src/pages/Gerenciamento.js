@@ -35,7 +35,7 @@ export default function Gerenciamento() {
             <span>VEÍCULOS</span>
           </div>
 
-          <div className="gerenciamento__item">
+          <div className="gerenciamento__item" onClick={() => navigate("/funcionarios")}>
             <User size={24} color="#000" />
             <span>FUNCIONÁRIOS</span>
           </div>

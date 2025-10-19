@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&family=Krona+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* ESTRUTURA GERAL */
 .pagina__motorista {
   background-color: #f2f2f2;
   min-height: 100vh;
@@ -33,7 +32,6 @@
   font-weight: bold;
 }
 
-/* TÍTULO CENTRAL */
 .titulo__central__motorista {
   display: flex;
   justify-content: center;
@@ -96,7 +94,7 @@
   
 }
 
-table {
+.tabela__motorista table {
   border-collapse: collapse;
   margin: 0;
   padding: 0;
