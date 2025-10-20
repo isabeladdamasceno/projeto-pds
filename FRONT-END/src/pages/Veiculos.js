@@ -378,7 +378,7 @@ export default function Veiculos() {
             </p>
             <div className="modal__botoes__veiculo">
               <button className="modal__botao__excluir__veiculo" onClick={confirmarExclusao}>
-                Excluir
+                Excluir Permanentemente
               </button>
               <button
                 className="modal__botao__cancelar__veiculo"
