@@ -41,9 +41,10 @@ export default function Modelos() {
     carregarModelos();
   }, []);
 
-  const modelosFiltrados = modelos.filter((m) =>
-    m.nome.toLowerCase().includes(busca.toLowerCase())
-  );
+ const modelosFiltrados = modelos.filter((m) =>
+    m.nome?.toLowerCase().includes(busca.toLowerCase()) ||
+    m.marca?.toLowerCase().includes(busca.toLowerCase())
+);
 
   // Cadastrar ou Editar
   const handleGravar = async () => {

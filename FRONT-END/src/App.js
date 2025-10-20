@@ -7,7 +7,8 @@ import Setores from "./pages/Setores";
 import Modelos from "./pages/Modelos";
 import Motoristas from "./pages/Motoristas";
 import Veiculos from "./pages/Veiculos";
-import Funcionarios from "./pages/Funcionarios";          
+import Funcionarios from "./pages/Funcionarios";
+import Procedimentos from "./pages/Procedimentos";          
 import "./style/global.css";          
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/motoristas" element={<Motoristas />} />
         <Route path="/veiculos" element={<Veiculos />} />
         <Route path="/funcionarios" element={<Funcionarios />} />
+        <Route path="/procedimentos" element={<Procedimentos />} />
       </Routes>
     </Router>
   );

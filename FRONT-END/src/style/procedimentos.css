@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&family=Krona+One&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.pagina__procedimento {
+  background-color: #f2f2f2;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.procedimento__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f2f2;
+  padding: 15px 40px;
+}
+
+.procedimento__header .logo {
+  height: 70px;
+}
+
+.botao__voltar__procedimento {
+  background: white;
+  color: #000;
+  border: 3px solid red;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* TÍTULO CENTRAL */
+.titulo__central__procedimento {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 27px;
+  font-weight: bold;
+  color: #000;
+  margin: 10px 0 20px 0;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.titulo__central__procedimento h1 {
+  color: #000;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.acoes__procedimento {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  width: 100%;
+}
+
+.barra__pesquisa__procedimento {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 500px;
+}
+
+.barra__pesquisa__procedimento input {
+  width: 100%;
+  padding: 10px 15px 10px 45px;
+  background-color: white;
+  border: 1px solid #000;
+  border-radius: 20px;
+  font-size: 22px;
+  font-family: 'Chau Philomene One', sans-serif;
+  color: #000;
+}
+
+.icone__pesquisa__procedimento {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: black;
+  pointer-events: none;
+}
+
+/* TABELA */
+.tabela__container__procedimento {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+  width: 100vw;
+  
+}
+
+.tabela__procedimento table {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+thead th {
+  background-color: red;
+  color: white;
+}
+
+th, td {
+  padding: 6px 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+  font-size: 22px;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+tbody td {
+  color: black;
+}
+
+.tabela__procedimento th:nth-child(1),
+.tabela__procedimento td:nth-child(1) {
+  width: 10%;
+}
+
+.tabela__procedimento th:nth-child(2),
+.tabela__procedimento td:nth-child(2) {
+  width: 40%;
+}
+
+.tabela__procedimento th:nth-child(3),
+.tabela__procedimento td:nth-child(3) {
+  width: 25%;
+}
+
+.tabela__procedimento th:nth-child(4),
+.tabela__procedimento td:nth-child(4) {
+  width: 15%;
+}
+
+.tabela__procedimento th:nth-child(5),
+.tabela__procedimento td:nth-child(5) {
+  width: 10%;
+  text-align: center;
+}
+
+.editar__procedimento,
+.excluir__procedimento {
+  font-size: 18px;
+  padding: 10px 18px;  
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+  border: none;
+  margin-right: 15px;
+}
+
+.editar__procedimento {
+  background: gray;
+  color: white;
+}
+
+.excluir__procedimento {
+  background: red;
+  color: white;
+}
+
+.cadastrar__container__procedimento {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding: 20px;
+}
+
+.cadastrar__procedimento {
+  background: #00bf63;
+  color: white;
+  border: none;
+  border-radius: 35px;
+  padding: 8px 25px !important;
+  font-size: 22px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.formulario__container__procedimento {
+  background: #d9d9d9;
+  padding: 40px 50px;
+  margin: 20px auto;
+  border-radius: 15px;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.formulario__titulo__procedimento {
+  margin-bottom: 35px;
+  background: #666;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 22px;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.formulario__campo__procedimento {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  
+}
+
+.campo__input__procedimento {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.campo__input__procedimento label {
+  flex: 0 0 160px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #000;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.campo__input__procedimento input,
+.campo__input__procedimento select {
+  width: 70%; 
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 18px;
+  font-family: "Open Sans", sans-serif;
+  color: #000;
+}
+
+/* MENSAGEM DE ERRO */
+.erro__mensagem__procedimento {
+  color: black;
+  font-size: 18px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.acao__botoes__procedimento {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;                   
+  min-width: 280px;    
+  overflow: visible;    
+}
+
+/* BOTÃO GRAVAR */
+.formulario__acoes__procedimento {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.gravar__procedimento {
+  background-color: #00bf63;
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px;
+}
+
+
+/* MODAIS */
+.modal__fundo__procedimento {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal__confirmacao__procedimento,
+.modal__sucesso__procedimento {
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-radius: 20px;
+  padding: 35px;
+  width: 550px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.modal__confirmacao__procedimento p,
+.modal__sucesso__procedimento p {
+  font-size: 20px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.modal__fechar__procedimento {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: red;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.modal__botoes__procedimento {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.modal__botao__excluir__procedimento {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.modal__botao__cancelar__procedimento {
+  background-color: #00bf63;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: "Chau Philomene One", sans-serif;
+}
+
+.modal__sucesso__procedimento svg {
+  display: block;
+  margin: 0 auto;
+  margin-top: -10px;
+}

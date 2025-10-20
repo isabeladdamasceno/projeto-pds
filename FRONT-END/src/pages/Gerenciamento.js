@@ -45,7 +45,7 @@ export default function Gerenciamento() {
             <span>MOTORISTAS</span>
           </div>
 
-          <div className="gerenciamento__item">
+          <div className="gerenciamento__item" onClick={() => navigate("/procedimentos")}>
             <FileText size={28} color="#000" />
             <span>PROCEDIMENTOS</span>
           </div>

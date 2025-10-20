@@ -58,8 +58,12 @@ export default function Motoristas() {
   }, []);
 
   const motoristasFiltrados = motoristas.filter((m) =>
-    m.nome.toLowerCase().includes(busca.toLowerCase())
-  );
+  m.nome?.toLowerCase().includes(busca.toLowerCase()) ||
+  m.cpf?.includes(busca) ||
+  m.cnh?.includes(busca) ||
+  m.situacao?.toLowerCase().includes(busca.toLowerCase())
+);
+
 
   //Cadastrar ou Editar
   const handleGravar = async () => {
