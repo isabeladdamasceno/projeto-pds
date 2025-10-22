@@ -8,7 +8,8 @@ import Modelos from "./pages/Modelos";
 import Motoristas from "./pages/Motoristas";
 import Veiculos from "./pages/Veiculos";
 import Funcionarios from "./pages/Funcionarios";
-import Procedimentos from "./pages/Procedimentos";          
+import Procedimentos from "./pages/Procedimentos";
+import OrdemServico from "./pages/OrdemServico";          
 import "./style/global.css";          
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/veiculos" element={<Veiculos />} />
         <Route path="/funcionarios" element={<Funcionarios />} />
         <Route path="/procedimentos" element={<Procedimentos />} />
+        <Route path="/ordemservico" element={<OrdemServico />} />
       </Routes>
     </Router>
   );

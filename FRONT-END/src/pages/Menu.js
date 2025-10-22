@@ -22,7 +22,7 @@ export default function Menu() {
             <p>GERENCIAMENTO</p>
             </div>
 
-        <div className="menu__item">
+        <div className="menu__item" onClick={() => navigate("/ordemservico")}>
           <Wrench size={60} color="#e60000" />
           <p>ORDENS DE SERVIÇO</p>
         </div>
